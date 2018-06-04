@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.ApAccountPackageMapper" >
+  <resultMap id="BaseResultMap" type="entity.ApAccountPackage" >
+    <id column="account_package_id" property="accountPackageId" jdbcType="INTEGER" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="strict_offline" property="strictOffline" jdbcType="BIT" />
+    <result column="remind_ahead_days" property="remindAheadDays" jdbcType="INTEGER" />
+    <result column="user_level" property="userLevel" jdbcType="CHAR" />
+    <result column="is_bind" property="isBind" jdbcType="INTEGER" />
+    <result column="macs" property="macs" jdbcType="VARCHAR" />
+    <result column="pay_date" property="payDate" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_package_id, start_date, end_date, strict_offline, remind_ahead_days, user_level, 
+    is_bind, macs, pay_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ap_account_package
+    where account_package_id = #{accountPackageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ap_account_package
+    where account_package_id = #{accountPackageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="entity.ApAccountPackage" >
+    insert into ap_account_package (account_package_id, start_date, end_date, 
+      strict_offline, remind_ahead_days, user_level, 
+      is_bind, macs, pay_date)
+    values (#{accountPackageId,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{strictOffline,jdbcType=BIT}, #{remindAheadDays,jdbcType=INTEGER}, #{userLevel,jdbcType=CHAR}, 
+      #{isBind,jdbcType=INTEGER}, #{macs,jdbcType=VARCHAR}, #{payDate,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="entity.ApAccountPackage" >
+    insert into ap_account_package
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountPackageId != null" >
+        account_package_id,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="strictOffline != null" >
+        strict_offline,
+      </if>
+      <if test="remindAheadDays != null" >
+        remind_ahead_days,
+      </if>
+      <if test="userLevel != null" >
+        user_level,
+      </if>
+      <if test="isBind != null" >
+        is_bind,
+      </if>
+      <if test="macs != null" >
+        macs,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountPackageId != null" >
+        #{accountPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="strictOffline != null" >
+        #{strictOffline,jdbcType=BIT},
+      </if>
+      <if test="remindAheadDays != null" >
+        #{remindAheadDays,jdbcType=INTEGER},
+      </if>
+      <if test="userLevel != null" >
+        #{userLevel,jdbcType=CHAR},
+      </if>
+      <if test="isBind != null" >
+        #{isBind,jdbcType=INTEGER},
+      </if>
+      <if test="macs != null" >
+        #{macs,jdbcType=VARCHAR},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.ApAccountPackage" >
+    update ap_account_package
+    <set >
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="strictOffline != null" >
+        strict_offline = #{strictOffline,jdbcType=BIT},
+      </if>
+      <if test="remindAheadDays != null" >
+        remind_ahead_days = #{remindAheadDays,jdbcType=INTEGER},
+      </if>
+      <if test="userLevel != null" >
+        user_level = #{userLevel,jdbcType=CHAR},
+      </if>
+      <if test="isBind != null" >
+        is_bind = #{isBind,jdbcType=INTEGER},
+      </if>
+      <if test="macs != null" >
+        macs = #{macs,jdbcType=VARCHAR},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=DATE},
+      </if>
+    </set>
+    where account_package_id = #{accountPackageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entity.ApAccountPackage" >
+    update ap_account_package
+    set start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      strict_offline = #{strictOffline,jdbcType=BIT},
+      remind_ahead_days = #{remindAheadDays,jdbcType=INTEGER},
+      user_level = #{userLevel,jdbcType=CHAR},
+      is_bind = #{isBind,jdbcType=INTEGER},
+      macs = #{macs,jdbcType=VARCHAR},
+      pay_date = #{payDate,jdbcType=DATE}
+    where account_package_id = #{accountPackageId,jdbcType=INTEGER}
+  </update>
+</mapper>

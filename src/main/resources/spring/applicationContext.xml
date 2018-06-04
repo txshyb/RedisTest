@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- @version $Id: applicationContext.xml 561608 2007-08-01 00:33:12Z vgritsenko $ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+http://www.directwebremoting.org/schema/spring-dwr
+        http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+
+<!--    <import resource="spring-redis.xml"></import>-->
+    <context:component-scan base-package="mvc.dao"/>
+    <context:component-scan base-package="mvc.service"/>
+    <context:component-scan base-package="Redis"/>
+    <context:component-scan base-package="cache.service"/>
+    <context:component-scan base-package="quartz"/>
+    <context:component-scan base-package="scheduled"/>
+    <context:component-scan base-package="queue"></context:component-scan>
+    <context:component-scan base-package="aop"/>
+    <!-- 不注册spring会因为构造器循环依赖报错-->
+    <!--<context:component-scan base-package="sourcecode.spring.构造器循环依赖"/>-->
+    <context:component-scan base-package="sourcecode.spring.后处理器"/>
+    <!-- 线程池的配置 -->
+    <task:annotation-driven scheduler="myScheduler" executor="myExecutor" />
+    <task:scheduler id="myScheduler" pool-size="3"/>
+    <task:executor id="myExecutor" pool-size="3" queue-capacity="100"/>
+
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <aop:aspectj-autoproxy ></aop:aspectj-autoproxy>
+
+     <!--启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效-->
+    <cache:annotation-driven />
+
+    <!-- 声明cacheManager -->
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcacheManagerFactory" />
+    </bean>
+    <!-- cacheManager工厂类，指定ehcache.xml的位置 -->
+    <bean id="ehcacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml" />
+    </bean>
+
+    <!--<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+
+    </bean>-->
+
+    <bean id="jobFactory" class="quartz.common.JobFactory"></bean>
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobFactory" ref="jobFactory"></property>
+    </bean>
+
+<!--    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="order" value="3" />
+        <property value="true" name="alwaysUseFullPath"></property>
+        <property name="mappings">
+            <props>
+                <prop key="/dwr/**">dwrController</prop>
+            </props>
+        </property>
+    </bean>-->
+
+<!--    <dwr:annotation-config></dwr:annotation-config>
+    &lt;!&ndash; 要求DWR将util.js和engine.js映射到dwrController &ndash;&gt;
+        <dwr:url-mapping />
+    &lt;!&ndash; 定义dwr &ndash;&gt;
+    <dwr:controller id="dwrController" debug="true">
+        <dwr:config-param name="allowScriptTagRemoting"
+                          value="true" />
+        <dwr:config-param name="crossDomainSessionSecurity"
+                          value="false" />
+    </dwr:controller>-->
+
+</beans>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.directwebremoting.org/schema/spring-dwr
+        http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd"
+        >
+   <!--     &lt;!&ndash; 启用spring mvc 注解 &ndash;&gt;
+        <context:annotation-driven />
+        &lt;!&ndash; 设置使用注解的类所在的jar包 &ndash;&gt;
+        <context:component-scan base-package="cache"></context:component-scan>
+        &lt;!&ndash; 完成请求和注解POJO的映射 &ndash;&gt;
+        <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+         &lt;!&ndash; 对转向页面的路径解析。prefix：前缀， suffix：后缀 &ndash;&gt;
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/" p:suffix=".jsp" />
+
+-->
+        <context:component-scan base-package="cache.Controller"/>
+    <context:component-scan base-package="thread"></context:component-scan>
+    <context:component-scan base-package="quartz"/>
+    <context:component-scan base-package="dwr"/>
+    <context:component-scan base-package="http"/>
+    <context:component-scan base-package="mvc"/>
+        <mvc:annotation-driven/>
+
+
+        <!-- 视图解析器 -->
+        <bean id="viewResolver"
+              class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                <property name="prefix" value="/WEB-INF/"/>
+                <property name="suffix" value=".jsp"/>
+        </bean>
+
+    <dwr:annotation-config></dwr:annotation-config>
+    <!-- 要求DWR将util.js和engine.js映射到dwrController -->
+    <dwr:url-mapping />
+    <!-- 定义dwr -->
+    <dwr:controller id="dwrController" debug="true">
+        <dwr:config-param name="allowScriptTagRemoting"
+                          value="true" />
+        <dwr:config-param name="crossDomainSessionSecurity"
+                          value="false" />
+    </dwr:controller>
+</beans>
